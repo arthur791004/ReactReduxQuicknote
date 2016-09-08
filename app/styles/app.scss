@@ -1,0 +1,12 @@
+#app {
+  min-width: 300px;
+  min-height: 300px;
+}
+
+.loading-dialog {
+  > div {
+    background-color: transparent !important;
+    box-shadow: none !important;
+    text-align: center;
+  }
+}
