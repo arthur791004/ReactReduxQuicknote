@@ -44,6 +44,21 @@ export default function quicknote(state = initialState, action) {
       };
 
       return Object.assign({}, state, nextState);
+    case QUICKNOTE.REQUEST_OPENGRAPH:
+    case QUICKNOTE.REQUEST_OPENGRAPH_SUCCESS:
+      nextState = {
+        title: action.title,
+        content: action.content,
+        isLoading: action.isLoading,
+      };
+
+      return Object.assign({}, state, nextState);
+    case QUICKNOTE.REQUEST_OPENGRAPH_FAIL:
+      nextState = {
+        isLoading: action.isLoading,
+      };
+
+      return Object.assign({}, state, nextState);
     case QUICKNOTE.CLOSE_SNACKBAR:
       nextState = {
         snackbar: action.snackbar,

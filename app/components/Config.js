@@ -1,60 +1,59 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
-import { Checkbox, TextField, RaisedButton } from 'material-ui';
+import { Field, reduxForm } from 'redux-form';
+import { RaisedButton } from 'material-ui';
 import { setConfig, setRoutePath } from '../actions';
+import { renderCheckbox, renderTextField } from '../utils';
+
+const form = reduxForm({
+  form: 'ConfigForm'
+});
 
 class Config extends Component {
   constructor(props) {
     super(props);
   }
 
-  onSubmit(event) {
+  handleSubmit(event) {
     event.preventDefault();
 
-    const { hostname, port, enableSSL } = this;
+    const { hostname, port, enableSSL } = this.props.config;
     const config = {
-      hostname: hostname.getValue().trim(),
-      port: port.getValue().trim(),
-      enableSSL: enableSSL.isChecked()
+      hostname,
+      port,
+      enableSSL,
     };
 
-    console.log('submit', config);
     this.props.setConfig(config);
     this.props.setRoutePath('/');
   }
 
   render() {
-    const { hostname, port, enableSSL } = this.props.config;
     return (
-      <form onSubmit= { this.onSubmit.bind(this) }>
+      <form onSubmit= { this.handleSubmit.bind(this) }>
         <section>
-          <TextField
-            defaultValue={ hostname }
-            autoFocus="true"
-            hintText="請輸入 mail2000 Hostname"
+          <Field
+            name="config.hostname"
+            component={ renderTextField }
+            label="請輸入 mail2000 Hostname"
             floatingLabelText="Mail2000 Hostname"
             floatingLabelFixed={ true }
             type="text"
-            ref={ ref => this.hostname = ref }
+            autoFocus="true"
           />
         </section>
         <section>
-          <TextField
-            defaultValue={ port }
-            hintText="請輸入 mail2000 Port"
+          <Field
+            name="config.port"
+            component={ renderTextField }
+            label="請輸入 mail2000 Port"
             floatingLabelText="Mail2000 Port"
             floatingLabelFixed={ true }
             type="value"
-            ref={ ref => this.port = ref }
           />
         </section>
         <section>
-          <Checkbox
-            defaultChecked={ enableSSL }
-            label="Enable SSL"
-            ref={ ref => this.enableSSL = ref }
-          />
+          <Field name="config.enableSSL" component={ renderCheckbox } label="Enable SSL" />
         </section>
         <section>
           <RaisedButton label="確定" type="submit" />
@@ -73,11 +72,12 @@ Config.propTypes = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Config);
+)(form(Config));
 
 function mapStateToProps(state) {
   return {
-    config: state.config
+    initialValues: { config: state.config },
+    config: state.config,
   };
 }
 

@@ -22,14 +22,13 @@ class Quicknote extends Component {
       <div id="app">
         <AppBar
           title={ title }
-          onLeftIconButtonTouchTap={ this.toggleDrawer.bind(this) }
+          onLeftIconButtonTouchTap={ this.toggleDrawer.bind(this, null) }
           iconClassNameRight="muidocs-icon-navigation-expand-more"
         />
         <Drawer
           docked={ false }
           width={ 200 }
-          open={ drawer }
-        >
+          open={ drawer } >
           <MenuItem primaryText="設定" onTouchTap={ this.toggleDrawer.bind(this, '/config') } />
           <MenuItem primaryText="登入" onTouchTap={ this.toggleDrawer.bind(this, '/login') } />
           <MenuItem primaryText="新增" onTouchTap={ this.toggleDrawer.bind(this, '/') } />

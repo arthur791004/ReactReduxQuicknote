@@ -5,11 +5,13 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var webpack = require('webpack');
 var vendors = [
   'react',
+  //'react-chrome-redux',
   'react-dom',
   'react-redux',
   'react-router',
   'react-tap-event-plugin',
   'redux',
+  'redux-form',
   'redux-logger',
   'redux-thunk',
   'material-ui',
@@ -19,12 +21,12 @@ var vendors = [
 ];
 var plugins = [
   new CleanPlugin('build'),
-  new ExtractPlugin('[name].[hash].css', { allChunks: true }),
+  new ExtractPlugin('[name].css', { allChunks: true }),
   new HtmlWebpackPlugin({
     template: path.resolve(__dirname, 'app/index.html'),
     filename: 'index.html'
   }),
-  new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.[chunkhash].js'),
+  new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js'),
   new webpack.optimize.OccurenceOrderPlugin()
 ];
 
@@ -52,7 +54,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'build'),
-    filename: '[name].[chunkhash].js',
+    filename: '[name].js',
   },
   module: {
     preLoaders: [
@@ -77,15 +79,15 @@ module.exports = {
       },
       {
         test: /\.(jpg|git|png)$/,
-        loader: 'url?limit=8192&name=images/[name].[hash:20].[ext]'
+        loader: 'url?limit=8192&name=images/[name].[ext]'
       },
       {
         test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'url?limit=8192&name=images/[name].[hash:20].[ext]'
+        loader: 'url?limit=8192&name=images/[name].[ext]'
       },
       {
         test:  /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'url?limit=8192&minetype=application/font-woff2&name=images/[name].[hash:20].[ext]'
+        loader: 'url?limit=8192&minetype=application/font-woff2&name=images/[name].[ext]'
       }
     ]
   },

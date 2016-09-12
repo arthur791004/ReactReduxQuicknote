@@ -4,6 +4,7 @@ import { APP, CONFIG, QUICKNOTE, USER } from '../constants';
 export {
   addQuickNote,
   requestAddQuicknote,
+  requestOpengraph,
   closeSnackbar,
   authUser,
   setConfig,
@@ -54,7 +55,7 @@ function requestAddQuicknote({ title, content }) {
             },
           });
         } else {
-          console.log('addQuickNote success', res.body);
+          console.log('addQuickNote success', res.text);
           dispatch({
             type: QUICKNOTE.REQUEST_ADD_QUICKNOTE_SUCCESS,
             title: '',
@@ -70,6 +71,46 @@ function requestAddQuicknote({ title, content }) {
   };
 }
 
+function requestOpengraph(url) {
+  return (dispatch, getState) => {
+    const urlEncoded = encodeURIComponent(url);
+    const requestUrl = 'http://opengraph.io/api/1.0/site/' + urlEncoded;
+    const store = getState();
+    const { title, content } = store.quicknote;
+
+    dispatch({
+      type: QUICKNOTE.REQUEST_OPENGRAPH,
+      isLoading: true,
+      title,
+      content,
+    });
+    superAgent
+      .get(requestUrl)
+      .end((err, res) => {
+        if (err || res.error) {
+          console.log('request opengraph failed', err || res.error);
+          dispatch({
+            type: QUICKNOTE.REQUEST_OPENGRAPH_FAIL,
+            isLoading: false,
+          });
+        } else {
+          console.log('request opengraph success', res.body);
+          const { hybridGraph } = res.body;
+          const content = hybridGraph.description ?
+            `${hybridGraph.description}\n\nsource url: ${hybridGraph.url}` :
+            `source url: ${hybridGraph.url}`;
+          dispatch({
+            type: QUICKNOTE.REQUEST_OPENGRAPH_SUCCESS,
+            title: hybridGraph.title,
+            content: content,
+            isLoading: false,
+          });
+        }
+      });
+  };
+
+}
+
 function closeSnackbar() {
   return {
     type: QUICKNOTE.CLOSE_SNACKBAR,
@@ -83,11 +124,12 @@ function closeSnackbar() {
 function authUser(authedUser) {
   return {
     type: USER.AUTH_SUCCESS,
-    user: authUser,
+    user: authedUser,
   };
 }
 
 function setConfig(config) {
+  chrome.storage.local.set({ config });
   return {
     type: CONFIG.SET,
     config

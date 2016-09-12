@@ -1,43 +1,54 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
+import { Field, reduxForm } from 'redux-form';
 import { CircularProgress, Dialog, RaisedButton, Snackbar, TextField } from 'material-ui';
-import { addQuicknote, closeSnackbar, requestAddQuicknote, setRoutePath } from '../actions';
+import { addQuicknote, closeSnackbar, requestAddQuicknote, requestOpengraph, setRoutePath } from '../actions';
+import { renderTextField } from '../utils';
+
+const form = reduxForm({
+  form: 'AddQuicknoteForm',
+  enableReinitialize: true,
+});
 
 class AddQuicknote extends Component {
   constructor(props) {
     super(props);
   }
 
-  onSubmit(event) {
+  handleSubmit(event) {
     event.preventDefault();
 
-    const { title, content } = this;
+    const { title, content } = this.props;
     const quicknote = {
-      title: title.getValue().trim(),
-      content: content.getValue(),
+      title,
+      content
     };
 
-    console.log('submit', quicknote);
     this.props.requestAddQuicknote(quicknote);
   }
 
-  onCancel() {
-    this.props.setRoutePath('/');
+  handleReset() {
+    this.props.initialize({ title: '', content: '' });
   }
 
   handleSnackbarClose() {
     this.props.closeSnackbar();
+    this.props.reset();
+  }
+
+  componentWillMount() {
+    chrome.tabs.getSelected(null, tab => {
+      this.props.requestOpengraph(tab.url);
+    });
   }
 
   render() {
-    const { title, content, isLoading, snackbar } = this.props;
+    const { isLoading, reset, snackbar, submitting } = this.props;
     return (
       <div>
         <Dialog
           contentClassName={ isLoading ? 'loading-dialog' : '' }
-          open={ isLoading }
-        >
+          open={ isLoading } >
           <CircularProgress />
         </Dialog>
         <Snackbar
@@ -46,33 +57,31 @@ class AddQuicknote extends Component {
           autoHideDuration={ 2000 }
           onRequestClose={ this.handleSnackbarClose.bind(this) }
         />
-        <form onSubmit= { this.onSubmit.bind(this) }>
+        <form onSubmit= { this.handleSubmit.bind(this) }>
           <section>
             標題
           </section>
-            <TextField
-              defaultValue={ title }
+            <Field
+              name="title"
+              component={ renderTextField }
+              label="請輸入隨手記標題"
               autoFocus="true"
-              hintText="請輸入隨手記標題"
-              type="text"
-              ref={ ref => this.title = ref }
             />
           <section>
             內容
           </section>
           <section>
-            <TextField
-              defaultValue={ content }
-              hintText="請輸入隨手記內容"
-              type="text"
+            <Field
+              name="content"
+              component={ renderTextField }
+              label="請輸入隨手記內容"
               multiLine={ true }
-              rowsMax= { 6 }
-              ref={ ref => this.content = ref }
+              rowsMax={ 4 }
             />
           </section>
           <footer>
-            <RaisedButton label="確定" type="submit" />
-            <RaisedButton label="取消" onClick={ this.onCancel.bind(this) } />
+            <RaisedButton label="確定" type="submit" disabled={ submitting } />
+            <RaisedButton label="重填" onClick={ this.handleReset.bind(this) } />
           </footer>
         </form>
       </div>
@@ -92,14 +101,16 @@ AddQuicknote.propTypes = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AddQuicknote);
+)(form(AddQuicknote));
 
 function mapStateToProps(state) {
+  const { title, content } = state.quicknote;
   return {
-    title: state.quicknote.title,
-    content: state.quicknote.content,
+    initialValues: { title, content },
     isLoading: state.quicknote.isLoading,
     snackbar: state.quicknote.snackbar,
+    title: title,
+    content: content,
   };
 }
 
@@ -108,6 +119,7 @@ function mapDispatchToProps(dispatch) {
     addQuicknote: (quicknote) => dispatch(addQuicknote(quicknote)),
     closeSnackbar: () => dispatch(closeSnackbar()),
     requestAddQuicknote: (quicknote) => dispatch(requestAddQuicknote(quicknote)),
+    requestOpengraph: (url) => dispatch(requestOpengraph(url)),
     setRoutePath: (routePath) => dispatch(setRoutePath(routePath)),
   };
 }

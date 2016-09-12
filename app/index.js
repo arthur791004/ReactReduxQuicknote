@@ -11,22 +11,14 @@ import App from './components/App';
 import User from './models/User';
 
 const logger = createLogger();
-const user = new User();
-let initialState = {};
 
-user
-  .checkAuth()
-  .then((authedUser) => {
-    initialState = Object.assign({}, { user: authedUser });
-  })
-  .catch((error) => {
-    console.error(error);
-  })
-  .finally(() => {
-    const store = createStore(reducers, initialState, applyMiddleware(logger, thunk));
-    console.log(store.getState());
-    renderApp(store);
-  });
+chrome.storage.local.get('config', (config) => {
+  const initialState = Object.assign({}, config);
+  const store = createStore(reducers, initialState, applyMiddleware(logger, thunk));
+
+  console.log(store.getState());
+  renderApp(store);
+});
 
 function renderApp(store) {
   injectTapEventPlugin();
