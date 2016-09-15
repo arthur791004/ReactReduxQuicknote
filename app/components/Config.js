@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { RaisedButton } from 'material-ui';
 import { setConfig, setRoutePath } from '../actions';
 import { renderCheckbox, renderTextField } from '../utils';
@@ -75,9 +75,10 @@ export default connect(
 )(form(Config));
 
 function mapStateToProps(state) {
+  const selector = formValueSelector('ConfigForm');
   return {
     initialValues: { config: state.config },
-    config: state.config,
+    config: selector(state, 'config') || state.config,
   };
 }
 

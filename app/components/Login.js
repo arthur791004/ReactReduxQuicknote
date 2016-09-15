@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { RaisedButton } from 'material-ui';
 import { authUser, setRoutePath } from '../actions';
+import { getOrigin } from '../utils';
 
 class Login extends Component {
   constructor(props) {
@@ -11,10 +12,10 @@ class Login extends Component {
   onClick() {
     const { config, user } = this.props;
     const { authUser, setRoutePath } = this.props;
-    const protocols = config.enableSSL ? 'https://' : 'http://';
+    const origin = getOrigin(config);
     const interval = setInterval(() => {
       user
-        .checkAuth()
+        .checkAuth(config)
         .then((authedUser) => {
           clearInterval(interval);
           authUser(authedUser);
@@ -22,7 +23,7 @@ class Login extends Component {
         });
     }, 1000);
 
-    window.open(`${protocols}${config.hostname}:${config.port}`);
+    window.open(origin);
   }
 
   render() {

@@ -1,17 +1,16 @@
 import Promise from 'bluebird';
 import superAgent from 'superagent';
-
-const HOSTNAME = 'https://mail.office.openfind.com.tw';
+import { getOrigin } from '../utils';
 
 export default class User {
   constructor() {
 
   }
 
-  getCrumb(cookie) {
+  getCrumb(origin, cookie) {
     return new Promise((resolve, reject) => {
       superAgent
-        .get(`${HOSTNAME}/cgi-bin/notepad?HTTP_COOKIE=${cookie}`)
+        .get(`${origin}/cgi-bin/notepad?HTTP_COOKIE=${cookie}`)
         .end((err, res) => {
           if (err || !res.ok) {
             return reject(err);
@@ -30,14 +29,14 @@ export default class User {
     });
   }
 
-  getCookie(url, name) {
+  getCookie(origin, name) {
     return new Promise((resolve, reject) => {
       if (!chrome) {
         return reject(new Error('cannot get cookie or crumb'));
       }
 
       var payload = {
-        url,
+        url: origin,
         name
       };
 
@@ -47,10 +46,12 @@ export default class User {
     });
   }
 
-  checkAuth() {
-    return this.getCookie(HOSTNAME, 'key')
+  checkAuth(config) {
+    const origin = getOrigin(config);
+
+    return this.getCookie(origin, 'key')
       .then(cookie => {
-        return this.getCrumb(cookie);
+        return this.getCrumb(origin, cookie);
       });
   }
 }

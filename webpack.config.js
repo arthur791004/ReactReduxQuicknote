@@ -50,6 +50,8 @@ if (process.env.PROD) {
 module.exports = {
   entry: {
     app: path.resolve(__dirname, 'app/index.js'),
+    //background: path.resolve(__dirname, 'app/background/index.js'),
+    //content: path.resolve(__dirname, 'app/content/index.js'),
     vendor: vendors,
   },
   output: {

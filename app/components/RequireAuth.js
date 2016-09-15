@@ -12,7 +12,7 @@ export default function(WrappedComponent) {
         setRoutePath('/config');
       } else {
         user
-          .checkAuth()
+          .checkAuth(config)
           .then((authedUser) => {
             authUser(authedUser);
           })

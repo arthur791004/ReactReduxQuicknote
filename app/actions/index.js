@@ -1,5 +1,7 @@
+import { hashHistory } from 'react-router';
 import superAgent from 'superagent';
 import { APP, CONFIG, QUICKNOTE, USER } from '../constants';
+import { getOpengraph } from '../utils';
 
 export {
   addQuickNote,
@@ -73,8 +75,6 @@ function requestAddQuicknote({ title, content }) {
 
 function requestOpengraph(url) {
   return (dispatch, getState) => {
-    const urlEncoded = encodeURIComponent(url);
-    const requestUrl = 'http://opengraph.io/api/1.0/site/' + urlEncoded;
     const store = getState();
     const { title, content } = store.quicknote;
 
@@ -84,31 +84,29 @@ function requestOpengraph(url) {
       title,
       content,
     });
-    superAgent
-      .get(requestUrl)
-      .end((err, res) => {
-        if (err || res.error) {
-          console.log('request opengraph failed', err || res.error);
-          dispatch({
-            type: QUICKNOTE.REQUEST_OPENGRAPH_FAIL,
-            isLoading: false,
-          });
-        } else {
-          console.log('request opengraph success', res.body);
-          const { hybridGraph } = res.body;
-          const content = hybridGraph.description ?
-            `${hybridGraph.description}\n\nsource url: ${hybridGraph.url}` :
-            `source url: ${hybridGraph.url}`;
-          dispatch({
-            type: QUICKNOTE.REQUEST_OPENGRAPH_SUCCESS,
-            title: hybridGraph.title,
-            content: content,
-            isLoading: false,
-          });
-        }
+
+    getOpengraph(url)
+      .then(({ hybridGraph }) => {
+        console.log('request opengraph success', hybridGraph);
+        const content = hybridGraph.description ?
+          `${hybridGraph.description}\n\nsource url: ${hybridGraph.url}` :
+          `source url: ${hybridGraph.url}`;
+
+        dispatch({
+          type: QUICKNOTE.REQUEST_OPENGRAPH_SUCCESS,
+          title: hybridGraph.title,
+          content: content,
+          isLoading: false,
+        });
+      })
+      .catch((error) => {
+        console.log('request opengraph failed', error);
+        dispatch({
+          type: QUICKNOTE.REQUEST_OPENGRAPH_FAIL,
+          isLoading: false,
+        });
       });
   };
-
 }
 
 function closeSnackbar() {
@@ -137,6 +135,7 @@ function setConfig(config) {
 }
 
 function setRoutePath(routePath) {
+  hashHistory.push(routePath);
   return {
     type: APP.SET_ROUTE_PATH,
     routePath

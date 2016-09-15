@@ -1,4 +1,3 @@
-import { hashHistory } from 'react-router';
 import { APP } from '../constants';
 
 const TITLE = {
@@ -16,7 +15,6 @@ const initialState = {
 export default function app(state = initialState, action) {
   switch(action.type) {
     case APP.SET_ROUTE_PATH:
-      hashHistory.push(action.routePath);
       return Object.assign({}, state, { routePath: action.routePath, title: TITLE[action.routePath] });
     case APP.TOGGLE_DRAWER:
       return Object.assign({}, state, { drawer: !action.drawer });
