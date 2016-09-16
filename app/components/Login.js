@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { RaisedButton } from 'material-ui';
 import { authUser, setRoutePath } from '../actions';
 import { getOrigin } from '../utils';
+import User from '../models/User';
 
 class Login extends Component {
   constructor(props) {
@@ -10,11 +11,11 @@ class Login extends Component {
   }
 
   onClick() {
-    const { config, user } = this.props;
+    const { config } = this.props;
     const { authUser, setRoutePath } = this.props;
     const origin = getOrigin(config);
     const interval = setInterval(() => {
-      user
+      new User()
         .checkAuth(config)
         .then((authedUser) => {
           clearInterval(interval);
@@ -37,7 +38,6 @@ class Login extends Component {
 
 Login.propTypes = {
   config: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
   setRoutePath: PropTypes.func.isRequired,
 };
 
@@ -49,7 +49,6 @@ export default connect(
 function mapStateToProps(state) {
   return {
     config: state.config,
-    user: state.user,
   };
 }
 

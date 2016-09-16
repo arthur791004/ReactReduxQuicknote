@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { CircularProgress, Dialog, RaisedButton, Snackbar, TextField } from 'material-ui';
 import { addQuicknote, closeSnackbar, requestAddQuicknote, requestOpengraph, setRoutePath } from '../actions';
 import { renderTextField } from '../utils';
@@ -105,12 +105,13 @@ export default connect(
 
 function mapStateToProps(state) {
   const { title, content } = state.quicknote;
+  const selector = formValueSelector('AddQuicknoteForm');
   return {
     initialValues: { title, content },
     isLoading: state.quicknote.isLoading,
     snackbar: state.quicknote.snackbar,
-    title: title,
-    content: content,
+    title: selector(state, 'title') || title,
+    content: selector(state, 'content') || content,
   };
 }
 

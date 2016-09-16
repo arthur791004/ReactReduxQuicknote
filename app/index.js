@@ -3,19 +3,16 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import { applyMiddleware, createStore } from 'redux';
-import thunk from 'redux-thunk';
-import createLogger from 'redux-logger';
-import reducers from './reducers';
+import { Store } from 'react-chrome-redux';
+import { APP } from './constants';
 import App from './components/App';
-import User from './models/User';
 
-const logger = createLogger();
+const store = new Store({
+  portName: APP.NAME
+});
 
-chrome.storage.local.get('config', (config) => {
-  const initialState = Object.assign({}, config);
-  const store = createStore(reducers, initialState, applyMiddleware(logger, thunk));
-
+const unsubscribe = store.subscribe(() => {
+  unsubscribe();
   console.log(store.getState());
   renderApp(store);
 });

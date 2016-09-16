@@ -5,7 +5,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var webpack = require('webpack');
 var vendors = [
   'react',
-  //'react-chrome-redux',
+  'react-chrome-redux',
   'react-dom',
   'react-redux',
   'react-router',
@@ -50,8 +50,8 @@ if (process.env.PROD) {
 module.exports = {
   entry: {
     app: path.resolve(__dirname, 'app/index.js'),
-    //background: path.resolve(__dirname, 'app/background/index.js'),
-    //content: path.resolve(__dirname, 'app/content/index.js'),
+    background: path.resolve(__dirname, 'app/background/index.js'),
+    content: path.resolve(__dirname, 'app/content/index.js'),
     vendor: vendors,
   },
   output: {

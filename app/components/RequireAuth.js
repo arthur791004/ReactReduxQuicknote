@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { authUser, setRoutePath } from '../actions';
+import User from '../models/User';
 
 export default function(WrappedComponent) {
   class Auth extends Component {
     componentWillMount() {
-      const { config, user } = this.props;
+      const { config } = this.props;
       const { authUser, setRoutePath } = this.props;
 
       if (!config.hostname) {
         setRoutePath('/config');
       } else {
-        user
+        new User()
           .checkAuth(config)
           .then((authedUser) => {
             authUser(authedUser);
@@ -35,7 +36,6 @@ export default function(WrappedComponent) {
   function mapStateToProps(state) {
     return {
       config: state.config,
-      user: state.user,
     };
   }
 

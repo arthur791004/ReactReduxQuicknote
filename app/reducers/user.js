@@ -1,12 +1,14 @@
 import { USER } from '../constants';
-import User from '../models/User';
 
-const initialState = new User();
+const initialState = {
+  cookie: '',
+  crumb: '',
+};
 
-export default function counter(state = initialState, action) {
+export default function user(state = initialState, action) {
   switch(action.type) {
     case USER.AUTH_SUCCESS:
-      return Object.assign(new User(), state, action.user);
+      return Object.assign({}, state, action.user);
     default:
       return state;
   }

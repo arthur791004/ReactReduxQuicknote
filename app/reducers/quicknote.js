@@ -20,7 +20,7 @@ export default function quicknote(state = initialState, action) {
       };
 
       return Object.assign({}, state, initialState, nextState);
-    case QUICKNOTE.REQUEST_ADD_QUICKNOTE:
+    case QUICKNOTE.REQUEST_ADD_QUICKNOTE_PENDING:
       nextState = {
         title: action.title,
         content: action.content,
@@ -44,7 +44,7 @@ export default function quicknote(state = initialState, action) {
       };
 
       return Object.assign({}, state, nextState);
-    case QUICKNOTE.REQUEST_OPENGRAPH:
+    case QUICKNOTE.REQUEST_OPENGRAPH_PENDING:
     case QUICKNOTE.REQUEST_OPENGRAPH_SUCCESS:
       nextState = {
         title: action.title,

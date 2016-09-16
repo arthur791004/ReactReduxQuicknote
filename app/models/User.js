@@ -19,9 +19,10 @@ export default class User {
           try {
             var crumb = res.text.match(/<input type=hidden name="crumb" value="(\d+)">/)[1];
 
-            this.cookie = cookie;
-            this.crumb = crumb;
-            return resolve(this);
+            return resolve({
+              cookie,
+              crumb,
+            });
           } catch(e) {
             return reject(new Error('cannot get cookie or crumb'));
           }
