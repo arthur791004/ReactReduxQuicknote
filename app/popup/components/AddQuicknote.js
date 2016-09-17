@@ -2,8 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { CircularProgress, Dialog, RaisedButton, Snackbar, TextField } from 'material-ui';
-import { addQuicknote, closeSnackbar, requestAddQuicknote, requestOpengraph, setRoutePath } from '../actions';
-import { renderTextField } from '../utils';
+import { addQuicknote, closeSnackbar, requestAddQuicknote, requestOpengraph, setRoutePath } from '../../shares/actions';
+import { renderTextField } from '../../shares/utils';
 
 const form = reduxForm({
   form: 'AddQuicknoteForm',

@@ -1,6 +1,7 @@
 var path = require('path');
-var CleanPlugin = require('clean-webpack-plugin');
-var ExtractPlugin = require('extract-text-webpack-plugin');
+var CleanWebpackPlugin = require('clean-webpack-plugin');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
+var ExtractWebpackPlugin = require('extract-text-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var webpack = require('webpack');
 var vendors = [
@@ -20,11 +21,16 @@ var vendors = [
   'bluebird',
 ];
 var plugins = [
-  new CleanPlugin('build'),
-  new ExtractPlugin('[name].css', { allChunks: true }),
+  new CleanWebpackPlugin('build'),
+  new CopyWebpackPlugin([
+    { from: path.resolve(__dirname, 'app/manifest.json') },
+    { from: path.resolve(__dirname, 'app/shares/images/icon.png') },
+  ]),
+  new ExtractWebpackPlugin('[name].css', { allChunks: true }),
   new HtmlWebpackPlugin({
-    template: path.resolve(__dirname, 'app/index.html'),
-    filename: 'index.html'
+    template: path.resolve(__dirname, 'app/popup/index.html'),
+    filename: 'popup.html',
+    chunks: ['vendor', 'popup']
   }),
   new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js'),
   new webpack.optimize.OccurenceOrderPlugin()
@@ -49,9 +55,9 @@ if (process.env.PROD) {
 
 module.exports = {
   entry: {
-    app: path.resolve(__dirname, 'app/index.js'),
     background: path.resolve(__dirname, 'app/background/index.js'),
     content: path.resolve(__dirname, 'app/content/index.js'),
+    popup: path.resolve(__dirname, 'app/popup/index.js'),
     vendor: vendors,
   },
   output: {
@@ -77,7 +83,7 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        loader: ExtractPlugin.extract('style', 'css!sass')
+        loader: ExtractWebpackPlugin.extract('style', 'css!sass')
       },
       {
         test: /\.(jpg|git|png)$/,

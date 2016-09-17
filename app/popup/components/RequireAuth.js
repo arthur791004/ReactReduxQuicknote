@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { authUser, setRoutePath } from '../actions';
-import User from '../models/User';
+import { authUser, setRoutePath } from '../../shares/actions';
+import User from '../../shares/models/User';
 
 export default function(WrappedComponent) {
   class Auth extends Component {

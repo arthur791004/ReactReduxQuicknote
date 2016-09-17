@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { AppBar, Drawer, MenuItem } from 'material-ui';
-import { setRoutePath, toggleDrawer } from '../actions';
-import '../styles/app.scss';
+import { setRoutePath, toggleDrawer } from '../../shares/actions';
+import '../../shares/styles/app.scss';
+import '../styles/popup.scss';
 
 class Quicknote extends Component {
   constructor(props) {

@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { RaisedButton } from 'material-ui';
-import { authUser, setRoutePath } from '../actions';
-import { getOrigin } from '../utils';
-import User from '../models/User';
+import { authUser, setRoutePath } from '../../shares/actions';
+import { getOrigin } from '../../shares/utils';
+import User from '../../shares/models/User';
 
 class Login extends Component {
   constructor(props) {

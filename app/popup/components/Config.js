@@ -2,8 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { RaisedButton } from 'material-ui';
-import { setConfig, setRoutePath } from '../actions';
-import { renderCheckbox, renderTextField } from '../utils';
+import { setConfig, setRoutePath } from '../../shares/actions';
+import { renderCheckbox, renderTextField } from '../../shares/utils';
 
 const form = reduxForm({
   form: 'ConfigForm'
