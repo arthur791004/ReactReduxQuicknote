@@ -39,7 +39,7 @@ var plugins = [
 if (process.env.PROD) {
   plugins.push(
     new webpack.optimize.UglifyJsPlugin({
-      include: /\.min\.js$/,
+      include: /\.js$/,
       compress: {
         warnings: false,
         dead_code: true,

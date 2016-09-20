@@ -24,7 +24,7 @@ export default class User {
               crumb,
             });
           } catch(e) {
-            return reject(new Error('cannot get cookie or crumb'));
+            return reject(new Error('cannot get crumb'));
           }
         });
     });
@@ -33,7 +33,7 @@ export default class User {
   getCookie(origin, name) {
     return new Promise((resolve, reject) => {
       if (!chrome) {
-        return reject(new Error('cannot get cookie or crumb'));
+        return reject(new Error('cannot get cookie'));
       }
 
       var payload = {
@@ -42,7 +42,11 @@ export default class User {
       };
 
       chrome.cookies.get(payload, function(cookie) {
-        return resolve(cookie.value);
+        if (cookie && cookie.value) {
+          return resolve(cookie.value);
+        } else {
+          return reject(new Error('cannot get cookie'));
+        }
       });
     });
   }

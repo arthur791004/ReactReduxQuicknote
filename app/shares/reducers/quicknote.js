@@ -59,6 +59,13 @@ export default function quicknote(state = initialState, action) {
       };
 
       return Object.assign({}, state, nextState);
+    case QUICKNOTE.SHOW_CONFIG_DIALOG:
+    case QUICKNOTE.CLOSE_CONFIG_DIALOG:
+      nextState = {
+        isShowConfigDialog: action.isShowConfigDialog,
+      };
+
+      return Object.assign({}, state, nextState);
     case QUICKNOTE.CLOSE_SNACKBAR:
       nextState = {
         snackbar: action.snackbar,

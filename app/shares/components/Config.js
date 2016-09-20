@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { RaisedButton } from 'material-ui';
-import { setConfig, setRoutePath } from '../../shares/actions';
+import { setConfig, setRoutePath, closeConfigDialog } from '../../shares/actions';
 import { renderCheckbox, renderTextField } from '../../shares/utils';
 
 const form = reduxForm({
@@ -25,7 +25,14 @@ class Config extends Component {
     };
 
     this.props.setConfig(config);
-    this.props.setRoutePath('/');
+
+    setTimeout(() => {
+      if (this.props.isShowConfigDialog) {
+        this.props.closeConfigDialog();
+      } else {
+        this.props.setRoutePath('/');
+      }
+    });
   }
 
   render() {
@@ -65,8 +72,10 @@ class Config extends Component {
 
 Config.propTypes = {
   config: PropTypes.object.isRequired,
+  isShowConfigDialog: PropTypes.bool.isRequired,
   setConfig: PropTypes.func.isRequired,
   setRoutePath: PropTypes.func.isRequired,
+  closeConfigDialog: PropTypes.func.isRequired,
 };
 
 export default connect(
@@ -79,6 +88,7 @@ function mapStateToProps(state) {
   return {
     initialValues: { config: state.config },
     config: selector(state, 'config') || state.config,
+    isShowConfigDialog: state.quicknote.isShowConfigDialog || false,
   };
 }
 
@@ -86,5 +96,6 @@ function mapDispatchToProps(dispatch) {
   return {
     setConfig: (config) => dispatch(setConfig(config)),
     setRoutePath: (routePath) => dispatch(setRoutePath(routePath)),
+    closeConfigDialog: () => dispatch(closeConfigDialog()),
   };
 }

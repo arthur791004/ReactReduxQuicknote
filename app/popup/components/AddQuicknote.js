@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { CircularProgress, Dialog, RaisedButton, Snackbar, TextField } from 'material-ui';
 import { addQuicknote, closeSnackbar, requestAddQuicknote, requestOpengraph, setRoutePath } from '../../shares/actions';
-import { renderTextField } from '../../shares/utils';
+import { renderTextField, getOrigin } from '../../shares/utils';
 
 const form = reduxForm({
   form: 'AddQuicknoteForm',
@@ -31,6 +31,21 @@ class AddQuicknote extends Component {
     this.props.initialize({ title: '', content: '' });
   }
 
+  handleSnackbarTouchTap() {
+    const { config, snackbar } = this.props;
+
+    switch(snackbar.action) {
+      case '設定':
+        this.props.setRoutePath('/config');
+        break;
+      case '登入':
+        window.open(getOrigin(config));
+        break;
+      default:
+        break;
+    }
+  }
+
   handleSnackbarClose() {
     this.props.closeSnackbar();
     this.props.reset();
@@ -54,7 +69,9 @@ class AddQuicknote extends Component {
         <Snackbar
           open={ snackbar.open }
           message={ snackbar.msg }
+          action={ snackbar.action || '' }
           autoHideDuration={ 2000 }
+          onTouchTap={ this.handleSnackbarTouchTap.bind(this) }
           onRequestClose={ this.handleSnackbarClose.bind(this) }
         />
         <form onSubmit= { this.handleSubmit.bind(this) }>

@@ -12,6 +12,8 @@ const CONFIG = keyMirror({
 
 const QUICKNOTE = keyMirror({
   ADD: null,
+  SHOW_CONFIG_DIALOG: null,
+  CLOSE_CONFIG_DIALOG: null,
   CLOSE_SNACKBAR: null,
   REQUEST_ADD_QUICKNOTE: null,
   REQUEST_ADD_QUICKNOTE_PENDING: null,

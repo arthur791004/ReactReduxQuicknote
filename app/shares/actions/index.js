@@ -9,6 +9,8 @@ export {
   authUser,
   setConfig,
   setRoutePath,
+  showConfigDialog,
+  closeConfigDialog,
   toggleDrawer,
 };
 
@@ -32,6 +34,20 @@ function requestOpengraph(url) {
   return {
     type: QUICKNOTE.REQUEST_OPENGRAPH,
     url,
+  };
+}
+
+function showConfigDialog() {
+  return {
+    type: QUICKNOTE.SHOW_CONFIG_DIALOG,
+    isShowConfigDialog: true,
+  };
+}
+
+function closeConfigDialog() {
+  return {
+    type: QUICKNOTE.CLOSE_CONFIG_DIALOG,
+    isShowConfigDialog: false,
   };
 }
 

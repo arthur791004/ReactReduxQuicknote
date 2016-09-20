@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import { hashHistory, IndexRoute, Route, Router } from 'react-router';
 import Quicknote from './Quicknote';
 import AddQuicknote from './AddQuicknote';
-import Config from './Config';
 import Login from './Login';
 import PageNotFound from './PageNotFound';
 import RequireAuth from './RequireAuth';
+import Config from '../../shares/components/Config';
 
 export default class App extends Component {
   render() {
