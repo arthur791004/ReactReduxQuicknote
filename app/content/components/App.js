@@ -64,7 +64,7 @@ class App extends Component {
 
   render() {
     const imgSrc = chrome.extension.getURL('icon.png');
-    const { isShowConfigDialog, isLoading, snackbar, title } = this.props;
+    const { isShowConfigDialog, isLoading, snackbar } = this.props;
     return (
       <div>
         <Dialog
@@ -77,7 +77,7 @@ class App extends Component {
           open={ isShowConfigDialog } >
             <AppBar
               showMenuIconButton={ false }
-              title={ title } />
+              title="隨手記設定" />
             <Config />
         </Dialog>
         <Snackbar
@@ -114,7 +114,6 @@ function mapStateToProps(state) {
     isLoading: state.quicknote.isLoading || false,
     isShowConfigDialog: state.quicknote.isShowConfigDialog || false,
     snackbar: state.quicknote.snackbar,
-    title: state.app.title
   };
 }
 
