@@ -106,3 +106,20 @@ $ PROD=1 webpack
   * https://www.opengraph.io/
 * Others
   * https://www.npmjs.com/package/keymirror
+
+## Demo
+* config
+  * popup
+    ![config popup](https://github.com/arthur791004/ReactReduxQuicknote/blob/master/demo/config_popup.jpg)
+  * content
+    ![config_content](https://github.com/arthur791004/ReactReduxQuicknote/blob/master/demo/config_content.jpg)
+* login
+  * popup
+    ![login popup](https://github.com/arthur791004/ReactReduxQuicknote/blob/master/demo/login_popup.jpg)
+  * content                                   
+    ![login content](https://github.com/arthur791004/ReactReduxQuicknote/blob/master/demo/login_content.jpg)
+* add quicknote
+  * popup
+    ![add popup](https://github.com/arthur791004/ReactReduxQuicknote/blob/master/demo/add_popup.jpg)
+  * content                               
+    ![add content](https://github.com/arthur791004/ReactReduxQuicknote/blob/master/demo/add_content.jpg)
