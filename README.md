@@ -74,6 +74,9 @@ $ PROD=1 webpack
 * Others
   * keymirror
 
+## Todos
+* test case for redux action
+
 ## Reference
 * Basic
   * https://facebook.github.io/react/
